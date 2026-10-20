@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5f1eb">
+  <title>Fichajes · Álvaro Ruiz Arquitectura</title>
+  <style>
+    :root{
+      --bg:#f5f1eb;--paper:#fff;--ink:#171717;--muted:#76716a;--line:#e5ded4;
+      --soft:#f8f6f2;--dark:#20211f;--ok:#387553;--warn:#9a7331;--bad:#9c4942;
+      --shadow:0 22px 60px rgba(30,25,18,.08);--r:22px
+    }
+    *{box-sizing:border-box} html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input,select{font:inherit} button{cursor:pointer}
+    .app{max-width:1280px;margin:auto;padding:24px}
+    .brand{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}
+    .wordmark{letter-spacing:.22em;font-weight:500;font-size:18px;line-height:1.25}.wordmark small{display:block;font-size:9px;letter-spacing:.34em;margin-top:4px}
+    .strap{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+    .card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+    .hidden{display:none!important}.muted{color:var(--muted)}.tiny{font-size:11px}.label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .btn{border:0;border-radius:13px;padding:13px 16px;font-weight:600}.btn-dark{background:var(--dark);color:#fff}.btn-light{background:#fff;color:var(--ink);border:1px solid var(--line)}
+    .btn-danger{background:#fff1ef;color:#8f403a;border:1px solid #efc9c5}.btn:disabled{opacity:.5;cursor:not-allowed}
+    .field{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none}.field:focus{border-color:#aaa197}
+    .row{display:flex;gap:10px;align-items:center}.grow{flex:1}
+    .notice{padding:11px 13px;border-radius:12px;font-size:12px;margin:10px 0}.notice.info{background:#f0eee9}.notice.error{background:#fff0ee;color:#873b35;border:1px solid #edc7c2}.notice.ok{background:#edf6ef;color:#2f6744;border:1px solid #cfe2d4}
+
+    /* Auth */
+    .auth-wrap{max-width:520px;margin:5vh auto}.auth-card{padding:30px}.auth-card h1{font-size:34px;letter-spacing:-.03em;font-weight:500;margin:8px 0 8px}
+    .tabs{display:grid;grid-template-columns:1fr 1fr;background:#f0ede8;border-radius:12px;padding:4px;margin:24px 0 18px}
+    .tab{border:0;background:transparent;padding:10px;border-radius:9px}.tab.active{background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+    .form-grid{display:grid;gap:10px}.auth-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px}.link{border:0;background:transparent;color:#5b5751;text-decoration:underline;padding:6px}
+    .privacy-check{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--muted);line-height:1.45}.privacy-check input{margin-top:3px}
+
+    /* Role chooser */
+    .role-wrap{max-width:700px;margin:8vh auto}.role-card{padding:34px}.role-card h1{font-size:36px;letter-spacing:-.03em;font-weight:500;margin:6px 0 8px}
+    .roles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}.role{padding:24px;border:1px solid var(--line);background:#fff;border-radius:18px;text-align:left}
+    .role strong{font-size:18px}.role p{color:var(--muted);font-size:13px;line-height:1.45}.role:hover{border-color:#bdb4a8}
+
+    /* App topbar */
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e7e1d8;font-size:12px;font-weight:700}
+
+    /* Employee */
+    .employee-card{max-width:560px;margin:2vh auto;padding:28px}.employee-card h1{font-size:38px;letter-spacing:-.035em;font-weight:500;margin:26px 0 6px}
+    .clock-grid{display:grid;gap:12px;margin:26px 0 16px}.clock{border-radius:16px;padding:22px;border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-size:18px;font-weight:600}
+    .clock.in{background:var(--dark);color:#fff;border-color:var(--dark)}.clock.out{background:#fff}.clock span:last-child{font-size:28px}
+    .geo{display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:12px;line-height:1.4;margin:12px 0 18px}.geo input{width:18px;height:18px;margin-top:1px}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.info-box{padding:15px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+    .history{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.history-title{display:flex;justify-content:space-between;align-items:center}.event{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}
+    .event:last-child{border:0}.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;font-size:11px;background:#efede9}.badge.ok{background:#eaf4ed;color:#2f6845}.badge.warn{background:#f8efdf;color:#866321}.badge.bad{background:#fae9e6;color:#8b3d36}
+
+    /* Admin */
+    .admin-layout{display:grid;grid-template-columns:230px 1fr;gap:18px}.side{padding:18px;position:sticky;top:16px;height:max-content}.nav{display:grid;gap:3px;margin-top:12px}
+    .nav button{border:0;background:transparent;text-align:left;padding:12px;border-radius:10px;color:#4f4b46}.nav button.active{background:#efebe5;color:#111}
+    .main h1{font-size:36px;letter-spacing:-.035em;font-weight:500;margin:3px 0 16px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+    .kpi{padding:18px}.kpi .num{font-size:32px;font-weight:600;margin-top:7px}.kpi small{color:var(--muted)}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.toolset{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .table-card{padding:10px;overflow:auto}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:12px 11px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+    .search{max-width:270px}.section{margin-top:16px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.section-head h2{font-size:20px;font-weight:500;margin:0}
+
+    /* Modal */
+    .modal-back{position:fixed;inset:0;background:rgba(22,20,17,.42);display:grid;place-items:center;padding:18px;z-index:50}.modal{width:min(520px,100%);padding:24px}.modal h2{margin:5px 0 8px;font-weight:500}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+    .switchline{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}.switchline:last-child{border-bottom:0}
+
+    .version{position:fixed;right:12px;bottom:12px;background:#1d1e1c;color:#fff;border-radius:999px;padding:6px 9px;font-size:10px;z-index:60}
+    @media(max-width:900px){.app{padding:16px}.admin-layout{grid-template-columns:1fr}.side{position:static}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.kpis{grid-template-columns:1fr 1fr}.roles{grid-template-columns:1fr}}
+    @media(max-width:560px){.brand{align-items:flex-start}.strap{display:none}.wordmark{font-size:15px}.auth-card,.role-card,.employee-card{padding:20px}.employee-card h1{font-size:31px}.info-grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.kpi{padding:14px}.kpi .num{font-size:25px}.topbar{align-items:flex-start}.top-actions{justify-content:flex-end}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="brand">
+    <div class="wordmark">ÁLVARO RUIZ<small>ARQUITECTURA</small></div>
+    <div class="strap">personas · proyectos · tiempo bien invertido</div>
+  </header>
+
+  <main id="authScreen" class="auth-wrap">
+    <section class="card auth-card">
+      <div class="label">Control horario</div>
+      <h1>Accede a tu espacio</h1>
+      <div class="muted">Una sola cuenta. Si tienes permisos de administrador podrás elegir cómo entrar.</div>
+      <div class="tabs">
+        <button id="loginTab" class="tab active">Entrar</button>
+        <button id="registerTab" class="tab">Registrarme</button>
+      </div>
+
+      <form id="loginForm" class="form-grid">
+        <input id="loginEmail" class="field" type="email" autocomplete="email" placeholder="Correo electrónico" required>
+        <input id="loginPassword" class="field" type="password" autocomplete="current-password" placeholder="Contraseña" required>
+        <button class="btn btn-dark" type="submit">Entrar</button>
+        <button id="forgotBtn" class="link" type="button">He olvidado mi contraseña</button>
+      </form>
+
+      <form id="registerForm" class="form-grid hidden">
+        <input id="regName" class="field" type="text" autocomplete="name" placeholder="Nombre y apellidos" required>
+        <input id="regEmail" class="field" type="email" autocomplete="email" placeholder="Correo electrónico" required>
+        <input id="regPassword" class="field" type="password" autocomplete="new-password" placeholder="Contraseña (mínimo 8 caracteres)" minlength="8" required>
+        <input id="regPassword2" class="field" type="password" autocomplete="new-password" placeholder="Repite la contraseña" minlength="8" required>
+        <label class="privacy-check"><input id="privacyOk" type="checkbox" required><span>Acepto que mis datos de cuenta se utilicen para gestionar el acceso al sistema de fichajes. La ubicación, si se activa, solo se solicita al fichar.</span></label>
+        <button class="btn btn-dark" type="submit">Crear cuenta</button>
+      </form>
+      <div id="authMsg"></div>
+    </section>
+  </main>
+
+  <main id="roleScreen" class="role-wrap hidden">
+    <section class="card role-card">
+      <div class="label">Sesión iniciada</div>
+      <h1>¿Cómo quieres entrar?</h1>
+      <div id="roleHello" class="muted"></div>
+      <div class="roles">
+        <button id="enterUserBtn" class="role"><strong>Entrar como usuario</strong><p>Fichar entrada y salida, consultar tus registros y gestionar tu cuenta.</p></button>
+        <button id="enterAdminBtn" class="role"><strong>Entrar como administrador</strong><p>Dashboard completo, estado del equipo, usuarios, horarios e informes.</p></button>
+      </div>
+      <button id="roleLogoutBtn" class="link" type="button">Cerrar sesión</button>
+    </section>
+  </main>
+
+  <main id="userScreen" class="hidden">
+    <div class="topbar">
+      <div><div class="label">Modo usuario</div><strong id="userTopName"></strong></div>
+      <div class="top-actions">
+        <button id="switchAdminBtn" class="btn btn-light hidden">Modo administrador</button>
+        <button id="accountBtn" class="btn btn-light">Mi cuenta</button>
+        <button id="userLogoutBtn" class="btn btn-light">Salir</button>
+      </div>
+    </div>
+    <section class="card employee-card">
+      <div class="label">Control horario</div>
+      <h1>Hola, <span id="firstName"></span></h1>
+      <div class="muted">¿Qué quieres hacer ahora?</div>
+      <div class="clock-grid">
+        <button id="clockInBtn" class="clock in"><span>Fichar entrada</span><span>→</span></button>
+        <button id="clockOutBtn" class="clock out"><span>Fichar salida</span><span>→</span></button>
+      </div>
+      <label class="geo"><input id="geoConsent" type="checkbox"><span>Verificar mi ubicación únicamente en el momento del fichaje. No se realiza seguimiento continuo.</span></label>
+      <div class="info-grid">
+        <div class="info-box"><div class="label">Centro</div><div id="userCenter">Sin asignar</div></div>
+        <div class="info-box"><div class="label">Estado actual</div><div id="currentStatus">Pendiente</div></div>
+      </div>
+      <div class="history">
+        <div class="history-title"><strong>Mis fichajes de hoy</strong><span id="todayDate" class="tiny muted"></span></div>
+        <div id="userHistory" class="muted" style="padding-top:10px">Cargando…</div>
+      </div>
+      <div id="userMsg"></div>
+    </section>
+  </main>
+
+  <main id="adminScreen" class="hidden">
+    <div class="topbar">
+      <div><div class="label">Modo administrador</div><strong id="adminTopName"></strong></div>
+      <div class="top-actions">
+        <button id="switchUserBtn" class="btn btn-light">Modo usuario</button>
+        <button id="adminAccountBtn" class="btn btn-light">Mi cuenta</button>
+        <button id="adminLogoutBtn" class="btn btn-light">Salir</button>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+      <aside class="card side">
+        <div class="label">Panel de control</div>
+        <nav class="nav">
+          <button class="active" data-target="dashSection">Resumen</button>
+          <button data-target="teamSection">Equipo</button>
+          <button data-target="recordsSection">Fichajes</button>
+        </nav>
+      </aside>
+
+      <section class="main">
+        <section id="dashSection">
+          <div class="toolbar">
+            <div><div class="label">Visión general</div><h1>Dashboard</h1></div>
+            <div class="toolset"><input id="adminDate" class="field" style="width:auto" type="date"><button id="refreshAdminBtn" class="btn btn-light">Actualizar</button></div>
+          </div>
+          <div class="kpis">
+            <div class="card kpi"><small>Usuarios activos</small><div id="kUsers" class="num">0</div></div>
+            <div class="card kpi"><small>En el trabajo</small><div id="kWorking" class="num">0</div></div>
+            <div class="card kpi"><small>Pendientes</small><div id="kPending" class="num">0</div></div>
+            <div class="card kpi"><small>Incidencias</small><div id="kIncidents" class="num">0</div></div>
+          </div>
+          <div class="card table-card">
+            <table>
+              <thead><tr><th>Persona</th><th>Estado</th><th>Última acción</th><th>Horas</th><th>Centro</th><th>Hora prevista</th></tr></thead>
+              <tbody id="statusRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="teamSection" class="section">
+          <div class="section-head"><h2>Equipo y permisos</h2><input id="teamSearch" class="field search" placeholder="Buscar persona…"></div>
+          <div class="card table-card">
+            <table>
+              <thead><tr><th>Persona</th><th>Correo</th><th>Centro</th><th>Horario</th><th>Permisos</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="teamRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="recordsSection" class="section">
+          <div class="section-head"><h2>Fichajes del día</h2><button id="exportBtn" class="btn btn-light">Exportar CSV</button></div>
+          <div class="card table-card">
+            <table>
+              <thead><tr><th>Hora</th><th>Persona</th><th>Tipo</th><th>Centro</th><th>Ubicación</th></tr></thead>
+              <tbody id="recordRows"></tbody>
+            </table>
+          </div>
+        </section>
+        <div id="adminMsg"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="editModal" class="modal-back hidden">
+  <section class="card modal">
+    <div class="label">Administración de usuario</div>
+    <h2 id="editUserTitle">Editar usuario</h2>
+    <div class="form-grid">
+      <input id="editCenter" class="field" placeholder="Centro de trabajo">
+      <input id="editExpected" class="field" type="time" placeholder="Hora prevista">
+      <div class="switchline"><span>Permisos de administrador</span><input id="editAdmin" type="checkbox"></div>
+      <div class="switchline"><span>Cuenta activa</span><input id="editActive" type="checkbox"></div>
+    </div>
+    <div id="editMsg"></div>
+    <div class="modal-actions"><button id="cancelEditBtn" class="btn btn-light">Cancelar</button><button id="saveEditBtn" class="btn btn-dark">Guardar</button></div>
+  </section>
+</div>
+
+<div id="accountModal" class="modal-back hidden">
+  <section class="card modal">
+    <div class="label">Cuenta</div>
+    <h2>Mi cuenta</h2>
+    <div id="accountSummary" class="notice info"></div>
+    <button id="resetPasswordBtn" class="btn btn-light" style="width:100%;margin-bottom:10px">Enviar email para cambiar contraseña</button>
+    <div class="notice info">Darse de baja elimina el acceso a la aplicación. Los registros históricos de jornada no se borran automáticamente.</div>
+    <input id="deletePassword" class="field" type="password" placeholder="Contraseña actual para confirmar la baja">
+    <div id="accountMsg"></div>
+    <div class="modal-actions"><button id="closeAccountBtn" class="btn btn-light">Cerrar</button><button id="deleteAccountBtn" class="btn btn-danger">Darme de baja</button></div>
+  </section>
+</div>
+
+<div class="version">V6 · FIREBASE</div>
+
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged,
+  signOut, sendPasswordResetEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, doc, setDoc, getDoc, getDocs, updateDoc, collection, addDoc, query, where,
+  serverTimestamp, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const $ = id => document.getElementById(id);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let profile = null;
+let mode = null;
+let usersCache = [];
+let recordsCache = [];
+let userRecords = [];
+let editUid = null;
+let unsubUserRecords = null;
+let unsubAdminUsers = null;
+let unsubAdminRecords = null;
+
+const screens = ["authScreen","roleScreen","userScreen","adminScreen"];
+function screen(id){ screens.forEach(x=>$(x).classList.toggle("hidden",x!==id)); }
+function msg(id,text,type="info"){ $(id).innerHTML = text ? `<div class="notice ${type}">${escapeHtml(text)}</div>` : ""; }
+function escapeHtml(v){ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c])); }
+function madridDate(d=new Date()){
+  const p=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(d);
+  const o={};p.forEach(x=>o[x.type]=x.value);return `${o.year}-${o.month}-${o.day}`;
+}
+function formatDateES(iso){ if(!iso)return ""; const [y,m,d]=iso.split("-"); return `${d}/${m}/${y}`; }
+function tsMs(x){ return x?.toMillis ? x.toMillis() : (x?.seconds ? x.seconds*1000 : 0); }
+function fmtTime(ms){ return new Intl.DateTimeFormat("es-ES",{timeZone:"Europe/Madrid",hour:"2-digit",minute:"2-digit"}).format(new Date(ms)); }
+function firstName(name){ return (name||"").trim().split(/\s+/)[0] || ""; }
+
+$("loginTab").onclick=()=>{ $("loginTab").classList.add("active");$("registerTab").classList.remove("active");$("loginForm").classList.remove("hidden");$("registerForm").classList.add("hidden");msg("authMsg",""); };
+$("registerTab").onclick=()=>{ $("registerTab").classList.add("active");$("loginTab").classList.remove("active");$("registerForm").classList.remove("hidden");$("loginForm").classList.add("hidden");msg("authMsg",""); };
+
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault(); msg("authMsg","Entrando…");
+  try{ await signInWithEmailAndPassword(auth,$("loginEmail").value.trim(),$("loginPassword").value); }
+  catch(err){ msg("authMsg",authError(err),"error"); }
+});
+$("registerForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=$("regName").value.trim(), email=$("regEmail").value.trim().toLowerCase(), p1=$("regPassword").value, p2=$("regPassword2").value;
+  if(p1!==p2) return msg("authMsg","Las contraseñas no coinciden.","error");
+  if(p1.length<8) return msg("authMsg","La contraseña debe tener al menos 8 caracteres.","error");
+  msg("authMsg","Creando cuenta…");
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,email,p1);
+    await setDoc(doc(db,"users",cred.user.uid),{
+      displayName:name,email,center:"",expectedStart:"",isAdmin:false,active:true,accountClosed:false,createdAt:serverTimestamp()
+    });
+    msg("authMsg","Cuenta creada.","ok");
+  }catch(err){ msg("authMsg",authError(err),"error"); }
+});
+$("forgotBtn").onclick=async()=>{
+  const email=$("loginEmail").value.trim();
+  if(!email) return msg("authMsg","Escribe primero tu correo electrónico.","error");
+  try{ await sendPasswordResetEmail(auth,email); msg("authMsg","Te hemos enviado un correo para cambiar la contraseña.","ok"); }
+  catch(err){ msg("authMsg",authError(err),"error"); }
+};
+
+onAuthStateChanged(auth,async user=>{
+  clearListeners();
+  currentUser=user;
+  if(!user){ profile=null;mode=null;screen("authScreen");return; }
+  const snap=await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){
+    profile={displayName:user.email?.split("@")[0]||"Usuario",email:user.email,isAdmin:false,active:true};
+    await setDoc(doc(db,"users",user.uid),{...profile,center:"",expectedStart:"",accountClosed:false,createdAt:serverTimestamp()});
+  }else profile={uid:user.uid,...snap.data()};
+  if(profile.accountClosed || profile.active===false){ await signOut(auth); return; }
+  $("roleHello").textContent=`Hola, ${profile.displayName || user.email}.`;
+  $("enterAdminBtn").classList.toggle("hidden",!profile.isAdmin);
+  if(profile.isAdmin) screen("roleScreen"); else enterUser();
+});
+
+$("enterUserBtn").onclick=enterUser;
+$("enterAdminBtn").onclick=enterAdmin;
+$("roleLogoutBtn").onclick=()=>signOut(auth);
+$("userLogoutBtn").onclick=()=>signOut(auth);
+$("adminLogoutBtn").onclick=()=>signOut(auth);
+$("switchAdminBtn").onclick=enterAdmin;
+$("switchUserBtn").onclick=enterUser;
+
+function clearListeners(){
+  [unsubUserRecords,unsubAdminUsers,unsubAdminRecords].forEach(fn=>{if(typeof fn==="function")fn();});
+  unsubUserRecords=unsubAdminUsers=unsubAdminRecords=null;
+}
+function enterUser(){
+  clearListeners(); mode="user";screen("userScreen");
+  $("userTopName").textContent=profile.displayName||currentUser.email;
+  $("firstName").textContent=firstName(profile.displayName);
+  $("userCenter").textContent=profile.center||"Sin asignar";
+  $("switchAdminBtn").classList.toggle("hidden",!profile.isAdmin);
+  $("todayDate").textContent=formatDateES(madridDate());
+  subscribeUserRecords();
+}
+function enterAdmin(){
+  if(!profile?.isAdmin) return;
+  clearListeners(); mode="admin";screen("adminScreen");
+  $("adminTopName").textContent=profile.displayName||currentUser.email;
+  $("adminDate").value=madridDate();
+  subscribeAdmin();
+}
+
+function subscribeUserRecords(){
+  const q=query(collection(db,"timeEntries"),where("uid","==",currentUser.uid),where("localDate","==",madridDate()));
+  unsubUserRecords=onSnapshot(q,snap=>{
+    userRecords=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>tsMs(a.createdAt)-tsMs(b.createdAt));
+    renderUserRecords();
+  },err=>msg("userMsg","No se pudieron cargar tus fichajes: "+err.message,"error"));
+}
+function renderUserRecords(){
+  const box=$("userHistory");
+  if(!userRecords.length){ box.innerHTML='<div class="muted">Todavía no has fichado hoy.</div>'; $("currentStatus").textContent="Pendiente"; return; }
+  box.innerHTML=userRecords.map(r=>`<div class="event"><span>${r.type==="entrada"?"Entrada":"Salida"} ${r.geoVerified?'<span class="badge ok">ubicación verificada</span>':""}</span><strong>${fmtTime(tsMs(r.createdAt)||r.clientMs)}</strong></div>`).join("");
+  const last=userRecords[userRecords.length-1];
+  $("currentStatus").textContent=last.type==="entrada"?"En el trabajo":"Fuera";
+}
+async function getLocation(){
+  if(!$("geoConsent").checked || !navigator.geolocation) return {verified:false};
+  return new Promise(resolve=>navigator.geolocation.getCurrentPosition(
+    p=>resolve({verified:true,lat:p.coords.latitude,lon:p.coords.longitude,accuracy:Math.round(p.coords.accuracy)}),
+    ()=>resolve({verified:false}),{enableHighAccuracy:false,timeout:7000,maximumAge:60000}
+  ));
+}
+async function clock(type){
+  const last=userRecords[userRecords.length-1];
+  if(last?.type===type) return msg("userMsg",`El último fichaje ya es de ${type}.`,"error");
+  const loc=await getLocation();
+  try{
+    await addDoc(collection(db,"timeEntries"),{
+      uid:currentUser.uid,
+      displayNameSnapshot:profile.displayName||currentUser.email,
+      type,localDate:madridDate(),center:profile.center||"",
+      geoVerified:loc.verified===true,
+      lat:loc.verified?loc.lat:null,lon:loc.verified?loc.lon:null,accuracy:loc.verified?loc.accuracy:null,
+      createdAt:serverTimestamp(),clientMs:Date.now()
+    });
+    msg("userMsg",type==="entrada"?"Entrada registrada.":"Salida registrada.","ok");
+  }catch(err){ msg("userMsg","No se pudo registrar: "+err.message,"error"); }
+}
+$("clockInBtn").onclick=()=>clock("entrada");
+$("clockOutBtn").onclick=()=>clock("salida");
+
+function subscribeAdmin(){
+  unsubAdminUsers=onSnapshot(collection(db,"users"),snap=>{
+    usersCache=snap.docs.map(d=>({uid:d.id,...d.data()})).filter(u=>!u.accountClosed);
+    renderAdmin();
+  },err=>msg("adminMsg","No se pudieron cargar los usuarios: "+err.message,"error"));
+  subscribeAdminRecords();
+}
+function subscribeAdminRecords(){
+  if(typeof unsubAdminRecords==="function")unsubAdminRecords();
+  const date=$("adminDate").value||madridDate();
+  const q=query(collection(db,"timeEntries"),where("localDate","==",date));
+  unsubAdminRecords=onSnapshot(q,snap=>{
+    recordsCache=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>tsMs(a.createdAt)-tsMs(b.createdAt));
+    renderAdmin();
+  },err=>msg("adminMsg","No se pudieron cargar los fichajes: "+err.message,"error"));
+}
+$("adminDate").onchange=subscribeAdminRecords;
+$("refreshAdminBtn").onclick=subscribeAdminRecords;
+
+function userDayState(u){
+  const rs=recordsCache.filter(r=>r.uid===u.uid).sort((a,b)=>tsMs(a.createdAt)-tsMs(b.createdAt));
+  if(!rs.length){
+    let incident=false;
+    if(($("adminDate").value||madridDate())===madridDate() && u.expectedStart){
+      const now=new Intl.DateTimeFormat("es-ES",{timeZone:"Europe/Madrid",hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date());
+      incident=now>u.expectedStart;
+    }
+    return {status:incident?"Incidencia":"Pendiente",last:"—",hours:"—",incident};
+  }
+  const last=rs[rs.length-1];
+  return {status:last.type==="entrada"?"En el trabajo":"Fuera",last:`${last.type==="entrada"?"Entrada":"Salida"} ${fmtTime(tsMs(last.createdAt)||last.clientMs)}`,hours:worked(rs),incident:false};
+}
+function worked(rs){
+  let start=null,total=0;
+  rs.forEach(r=>{
+    const ms=tsMs(r.createdAt)||r.clientMs||0;
+    if(r.type==="entrada")start=ms;
+    if(r.type==="salida"&&start){total+=Math.max(0,ms-start);start=null;}
+  });
+  if(start && ($("adminDate").value||madridDate())===madridDate()) total+=Math.max(0,Date.now()-start);
+  const mins=Math.floor(total/60000);return `${Math.floor(mins/60)}h ${String(mins%60).padStart(2,"0")}m`;
+}
+function renderAdmin(){
+  const active=usersCache.filter(u=>u.active!==false);
+  const states=active.map(u=>({u,s:userDayState(u)}));
+  $("kUsers").textContent=active.length;
+  $("kWorking").textContent=states.filter(x=>x.s.status==="En el trabajo").length;
+  $("kPending").textContent=states.filter(x=>x.s.status==="Pendiente").length;
+  $("kIncidents").textContent=states.filter(x=>x.s.incident).length;
+  $("statusRows").innerHTML=states.map(({u,s})=>{
+    const cls=s.status==="En el trabajo"?"ok":s.status==="Incidencia"?"bad":s.status==="Pendiente"?"warn":"";
+    return `<tr><td><strong>${escapeHtml(u.displayName)}</strong></td><td><span class="badge ${cls}">${escapeHtml(s.status)}</span></td><td>${escapeHtml(s.last)}</td><td>${escapeHtml(s.hours)}</td><td>${escapeHtml(u.center||"—")}</td><td>${escapeHtml(u.expectedStart||"—")}</td></tr>`;
+  }).join("")||'<tr><td colspan="6">Sin usuarios.</td></tr>';
+  renderTeam();
+  $("recordRows").innerHTML=recordsCache.map(r=>`<tr><td>${fmtTime(tsMs(r.createdAt)||r.clientMs)}</td><td>${escapeHtml(r.displayNameSnapshot)}</td><td>${r.type==="entrada"?"Entrada":"Salida"}</td><td>${escapeHtml(r.center||"—")}</td><td>${r.geoVerified?'<span class="badge ok">Verificada</span>':'—'}</td></tr>`).join("")||'<tr><td colspan="5">Sin fichajes para esta fecha.</td></tr>';
+}
+function renderTeam(){
+  const term=$("teamSearch").value.trim().toLowerCase();
+  const list=usersCache.filter(u=>!term || `${u.displayName} ${u.email} ${u.center}`.toLowerCase().includes(term));
+  $("teamRows").innerHTML=list.map(u=>`<tr>
+    <td><strong>${escapeHtml(u.displayName)}</strong></td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.center||"—")}</td><td>${escapeHtml(u.expectedStart||"—")}</td>
+    <td>${u.isAdmin?'<span class="badge ok">Admin + usuario</span>':'<span class="badge">Usuario</span>'}</td>
+    <td>${u.active!==false?'<span class="badge ok">Activo</span>':'<span class="badge bad">Inactivo</span>'}</td>
+    <td><button class="btn btn-light tiny edit-user" data-uid="${u.uid}">Editar</button></td></tr>`).join("");
+  document.querySelectorAll(".edit-user").forEach(b=>b.onclick=()=>openEdit(b.dataset.uid));
+}
+$("teamSearch").oninput=renderTeam;
+
+function openEdit(uid){
+  const u=usersCache.find(x=>x.uid===uid); if(!u)return;
+  editUid=uid;$("editUserTitle").textContent=u.displayName;$("editCenter").value=u.center||"";$("editExpected").value=u.expectedStart||"";
+  $("editAdmin").checked=u.isAdmin===true;$("editActive").checked=u.active!==false;
+  if(uid===currentUser.uid){$("editAdmin").disabled=true;$("editAdmin").title="No puedes quitarte a ti mismo los permisos de administrador desde aquí."} else $("editAdmin").disabled=false;
+  $("editModal").classList.remove("hidden");msg("editMsg","");
+}
+$("cancelEditBtn").onclick=()=>$("editModal").classList.add("hidden");
+$("saveEditBtn").onclick=async()=>{
+  if(!editUid)return;
+  try{
+    const data={center:$("editCenter").value.trim(),expectedStart:$("editExpected").value,active:$("editActive").checked};
+    if(editUid!==currentUser.uid)data.isAdmin=$("editAdmin").checked;
+    await updateDoc(doc(db,"users",editUid),data);
+    $("editModal").classList.add("hidden");
+  }catch(err){msg("editMsg","No se pudo guardar: "+err.message,"error");}
+};
+
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+  $(b.dataset.target).scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+$("exportBtn").onclick=()=>{
+  const rows=[["Fecha","Hora","Persona","Tipo","Centro","Ubicación verificada"]];
+  recordsCache.forEach(r=>rows.push([$ ("adminDate").value,fmtTime(tsMs(r.createdAt)||r.clientMs),r.displayNameSnapshot,r.type,r.center||"",r.geoVerified?"Sí":"No"]));
+  const csv="\ufeff"+rows.map(a=>a.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download=`fichajes_${$("adminDate").value}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);
+};
+
+function openAccount(){
+  $("accountSummary").textContent=`${profile.displayName} · ${currentUser.email}${profile.isAdmin?" · Administrador":""}`;
+  $("deletePassword").value="";msg("accountMsg","");$("accountModal").classList.remove("hidden");
+}
+$("accountBtn").onclick=openAccount;$("adminAccountBtn").onclick=openAccount;$("closeAccountBtn").onclick=()=>$("accountModal").classList.add("hidden");
+$("resetPasswordBtn").onclick=async()=>{
+  try{await sendPasswordResetEmail(auth,currentUser.email);msg("accountMsg","Te hemos enviado el correo para cambiar la contraseña.","ok");}
+  catch(err){msg("accountMsg",authError(err),"error");}
+};
+$("deleteAccountBtn").onclick=async()=>{
+  const pwd=$("deletePassword").value;
+  if(!pwd)return msg("accountMsg","Introduce tu contraseña actual.","error");
+  if(!confirm("¿Seguro que quieres darte de baja? Perderás el acceso a la aplicación."))return;
+  try{
+    const credential=EmailAuthProvider.credential(currentUser.email,pwd);
+    await reauthenticateWithCredential(currentUser,credential);
+    await updateDoc(doc(db,"users",currentUser.uid),{
+      active:false,accountClosed:true,email:"",closedAt:serverTimestamp()
+    });
+    await deleteUser(currentUser);
+    $("accountModal").classList.add("hidden");
+  }catch(err){msg("accountMsg",authError(err),"error");}
+};
+
+function authError(err){
+  const c=err?.code||"";
+  const map={
+    "auth/invalid-credential":"Correo o contraseña incorrectos.",
+    "auth/email-already-in-use":"Ya existe una cuenta con ese correo.",
+    "auth/invalid-email":"El correo no es válido.",
+    "auth/weak-password":"La contraseña es demasiado débil.",
+    "auth/too-many-requests":"Demasiados intentos. Prueba de nuevo más tarde.",
+    "auth/requires-recent-login":"Por seguridad, vuelve a iniciar sesión antes de realizar esta operación."
+  };
+  return map[c]||err?.message||"Se ha producido un error.";
+}
+</script>
+</body>
+</html>
